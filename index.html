@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BRELDYNG – Visor de PDF</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="funciones.js"></script>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true">
+
+
+            </div>
+            <h1 class="brand-title"> <img src="PDF/breldyngLogo.png" alt="" width="50" height="50"> BRELDYNG</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <div class="card-header">
+                <h2 class="card-title">Visualización de documento</h2>
+                <p class="card-subtitle">Solo lectura</p>
+            </div>
+            <div>
+                <div class="viewer-wrap" id="viewerWrap">
+                    <!--
+          Reemplaza docs/archivo.pdf por la ruta real de tu archivo.
+          El fragmento #toolbar=0 oculta la barra del visor nativo en la mayoría de navegadores basados en Chromium.
+        -->
+
+                    <iframe src="PDF/pdf1.pdf" class="pdf-frame" #toolbar=0>
+</iframe>
+
+                    <iframe #toolbar=0 id="pdfFrame" class="pdf-frame" src="PDF/pdf1.pdf" title="Documento PDF" loading="lazy"></iframe>
+
+
+                    <!-- Capa anti-interacción (ligera). Comentada por defecto para no afectar el scroll.
+             Si deseas bloquear clics dentro del visor, descomenta este div,
+             pero considera que también bloqueará la selección de texto.
+        -->
+                    <!-- <div class="overlay" aria-hidden="true"></div> -->
+
+                </div>
+            </div>
+            <noscript>
+        Para visualizar el PDF, por favor habilita JavaScript en tu navegador.
+      </noscript>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span>© <span id="year"></span> BRELDYNG. Todos los derechos reservados.</span>
+    </footer>
+
+    <script>
+        document.addEventListener("contextmenu", e => e.preventDefault());
+        document.addEventListener("keydown", e => {
+            if ((e.ctrlKey || e.metaKey) && ["s", "p"].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+            }
+        });
+
+
+        // Año dinámico en el footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Bloquear menú contextual y algunos atajos comunes (mitigación, no es perfecto)
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        document.addEventListener('keydown', e => {
+            const key = e.key.toLowerCase();
+            const ctrl = e.ctrlKey || e.metaKey;
+
+            // Bloqueos típicos: Guardar, Imprimir, Ver código, DevTools, etc.
+            if (
+                (ctrl && (key === 's' || key === 'p' || key === 'u')) ||
+                (ctrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) ||
+                key === 'f12'
+            ) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+        // Opcional: evitar arrastrar/soltar sobre la página
+        ['dragstart', 'drop'].forEach(evt =>
+            document.addEventListener(evt, e => e.preventDefault())
+        );
+    </script>
+</body>
+
+</html>
